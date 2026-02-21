@@ -1,8 +1,10 @@
 package br.com.estoque.service;
 
-import java.util.List;
+
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.estoque.entity.Produto;
@@ -78,8 +80,18 @@ public Produto atualizarParcial(Long id, Produto parcial) {
 	return repository.save(existente);
 }
 	
-public List<Produto> listarTodos(){
-	return repository.findAll();
+public Page<Produto> listarTodos(Pageable pageable){
+	
+	  if (pageable.getPageNumber() < 0) {
+		    throw new IllegalArgumentException("page não pode ser negativo");
+		  }
+
+		  if (pageable.getPageSize() <= 0 || pageable.getPageSize() > 100) {
+		    throw new IllegalArgumentException("size deve estar entre 1 e 100");
+		  }
+	
+	
+	return repository.findAll(pageable);
 }
 
 

@@ -11,9 +11,12 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 
 
-import java.util.List;
+
 import java.util.Optional;
 
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -239,8 +242,8 @@ public ResponseEntity<Produto> atualizarParcial(@PathVariable @Parameter(descrip
 		    )
 	})
 @GetMapping
-public ResponseEntity<List<Produto>> listar(){
-	List<Produto> listar =  service.listarTodos();
+public ResponseEntity<Page<Produto>> listar(@ParameterObject Pageable pageable){
+	Page<Produto> listar =  service.listarTodos(pageable);
 	return ResponseEntity.ok(listar);
 }
 
@@ -318,19 +321,6 @@ public ResponseEntity<Void> remover(@PathVariable @Parameter(description="ID do 
 	
 	return ResponseEntity.noContent().build();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	
 }

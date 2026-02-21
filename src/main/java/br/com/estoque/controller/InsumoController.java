@@ -1,6 +1,6 @@
 package br.com.estoque.controller;
 
-import java.util.List;
+
 import java.util.Optional;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +13,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 
-
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -90,7 +92,7 @@ public InsumoController(InsumoService service) {
 })
 
 @PostMapping 
-public ResponseEntity<?> salvar(@RequestBody @Valid InsumoCreateDTO insumoDTO) {
+public ResponseEntity<Insumo> salvar(@RequestBody @Valid InsumoCreateDTO insumoDTO) {
 		Insumo insumo = new Insumo();
 		insumo.setNome(insumoDTO.getNome());
 		insumo.setQuantidade(insumoDTO.getQuantidade());
@@ -148,7 +150,7 @@ public ResponseEntity<?> salvar(@RequestBody @Valid InsumoCreateDTO insumoDTO) {
 
 
 @PutMapping("/{id}")
-public ResponseEntity<?> atualizar(@PathVariable @Parameter(description="ID do insumo", example="1", required=true) Long id, @Valid @RequestBody InsumoPutDTO novoInsumo) {
+public ResponseEntity<Insumo> atualizar(@PathVariable @Parameter(description="ID do insumo", example="1", required=true) Long id, @Valid @RequestBody InsumoPutDTO novoInsumo) {
 		Insumo insumo= new Insumo();
 		insumo.setNome(novoInsumo.getNome());
 		insumo.setQuantidade(novoInsumo.getQuantidade());
@@ -214,7 +216,7 @@ public ResponseEntity<?> atualizar(@PathVariable @Parameter(description="ID do i
 
 
 @PatchMapping("/{id}")
-public ResponseEntity<?> atualizarParcial(@PathVariable @Parameter(description="ID do insumo", example="1", required=true) Long id, @Valid @RequestBody InsumoPatchDTO parcial){
+public ResponseEntity<Insumo> atualizarParcial(@PathVariable @Parameter(description="ID do insumo", example="1", required=true) Long id, @Valid @RequestBody InsumoPatchDTO parcial){
 		Insumo insumo = new Insumo();
 		insumo.setNome(parcial.getNome());
 		insumo.setQuantidade(parcial.getQuantidade());
@@ -241,8 +243,8 @@ public ResponseEntity<?> atualizarParcial(@PathVariable @Parameter(description="
 		    )
 	})
 @GetMapping
-public ResponseEntity<List<Insumo>> listarTodos(){
-	List<Insumo> listar=  service.listarTodos();
+public ResponseEntity<Page<Insumo>> listarTodos(@ParameterObject Pageable pageable){
+	Page<Insumo> listar=  service.listarTodos(pageable);
 	return ResponseEntity.ok(listar);
 }
 
