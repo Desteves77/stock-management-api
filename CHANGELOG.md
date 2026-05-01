@@ -100,5 +100,8 @@ Revisar, corrigir e consolidar a suíte de testes automatizados do projeto Estoq
 
 A suíte completa de testes foi executada com sucesso:
 
+Tests run: 66, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
+
 ```bash
 ./mvnw test
