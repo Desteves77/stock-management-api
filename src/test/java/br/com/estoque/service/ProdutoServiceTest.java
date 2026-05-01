@@ -61,15 +61,12 @@ void validarQuantidade() {
 
 @Test
 void validarIdInexistente() {
-	Produto produto = new Produto();
-	produto.setId(1L);
-	produto.setNome("A");
-	produto.setQuantidade(1);
+	Long id= 999L;
 	
-	when(produtoRepository.existsById(2L)).thenReturn(false);
+	when(produtoRepository.existsById(id)).thenReturn(false);
 	
 	assertThrows(ResourceNotFoundException.class, () -> {
-		produtoRepository.findById(2L);
+		produtoService.buscaporId(id);
 	});
 }
 

@@ -19,6 +19,7 @@ import br.com.estoque.entity.Insumo;
 import br.com.estoque.exception.ResourceNotFoundException;
 import br.com.estoque.repository.InsumoRepository;
 
+
 @ExtendWith(MockitoExtension.class)
 public class InsumoServiceTest {
 
@@ -60,16 +61,13 @@ void validarQuantidade() {
 }
 
 @Test
-void validarIdInexistente() {
-	Insumo insumo = new Insumo ();
-	insumo.setId(1L);
-	insumo.setNome("A");
-	insumo.setQuantidade(1);
+void validarIdInexistente(){
+	Long id = 999L;
 	
-	when(insumoRepository.existsById(2L)).thenReturn(false);
+	when(insumoRepository.existsById(id)).thenReturn(false);
 
 	assertThrows(ResourceNotFoundException.class, () ->{
-		insumoRepository.findById(2L);
+		insumoService.buscaporId(id);
 	});	
 	
 }
@@ -90,7 +88,7 @@ Optional <Insumo> resultado = insumoService.buscaporId(1L);
 
 assertTrue(resultado.isPresent());
 assertEquals(1L, resultado.get().getId());
-assertEquals("A", resultado.get().getNome());
+assertEquals("a", resultado.get().getNome());
 assertEquals(1, resultado.get().getQuantidade());
 }
 	

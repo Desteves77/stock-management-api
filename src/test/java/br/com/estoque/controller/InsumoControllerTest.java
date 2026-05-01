@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -18,15 +19,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import br.com.estoque.entity.Insumo;
+import br.com.estoque.exception.GlobalHandlerException;
 import br.com.estoque.exception.ResourceNotFoundException;
 import br.com.estoque.service.InsumoService;
 
 @WebMvcTest(InsumoController.class)
+@Import(GlobalHandlerException.class)
 public class InsumoControllerTest {
 	
 	@Autowired
@@ -56,7 +60,7 @@ void validarQuantidadePost() throws Exception{
 			.contentType(MediaType.APPLICATION_JSON)
 			.content("""
 				{
-					"nome": teste,
+					"nome": "teste",
 					"quantidade": -10
 				}
 					"""))
@@ -76,7 +80,7 @@ void validarSucessoPost() throws Exception{
 			.contentType(MediaType.APPLICATION_JSON)
 			.content("""
 				{
-					"nome": teste,
+					"nome": "teste",
 					"quantidade": 10
 				}
 					"""))
@@ -87,7 +91,7 @@ void validarSucessoPost() throws Exception{
 
 @Test
 void validarNomePut() throws Exception {
-	mockMvc.perform(put("/insumos")
+	mockMvc.perform(put("/insumos/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {
@@ -100,7 +104,7 @@ void validarNomePut() throws Exception {
 
 @Test
 void validarQuantidadePut() throws Exception {
-	mockMvc.perform(put("/insumos")
+	mockMvc.perform(put("/insumos/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {
@@ -116,16 +120,15 @@ void validarSucessoPut() throws Exception{
 	Insumo salvo = new Insumo();
 	salvo.setNome("teste");
 	salvo.setQuantidade(10);
-	salvo.setId(1L);
 	
 	when(insumoService.salvar(any(Insumo.class))).thenReturn(salvo);
 	
-	mockMvc.perform(put("/insumos")
+	mockMvc.perform(put("/insumos/1")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content("""
 				{
-					"nome": teste,
-					"quantidade": 10
+					"nome": "teste1",
+					"quantidade": 11
 				}
 					"""))
 	.andExpect(status().isOk());
@@ -134,7 +137,7 @@ void validarSucessoPut() throws Exception{
 
 @Test
 void validarNomePatch() throws Exception {
-	mockMvc.perform(patch("/insumos")
+	mockMvc.perform(patch("/insumos/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {
@@ -147,7 +150,7 @@ void validarNomePatch() throws Exception {
 
 @Test
 void validarQuantidadePatch() throws Exception {
-	mockMvc.perform(patch("/insumos")
+	mockMvc.perform(patch("/insumos/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {
@@ -167,11 +170,11 @@ void validarSucessoPatch() throws Exception{
 	
 	when(insumoService.salvar(any(Insumo.class))).thenReturn(salvo);
 	
-	mockMvc.perform(patch("/insumos")
+	mockMvc.perform(patch("/insumos/1")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content("""
 				{
-					"nome": teste,
+					"nome": "teste",
 					"quantidade": 10
 				}
 					"""))
@@ -196,13 +199,13 @@ void validarFormatoIdGet() throws Exception{
 @Test
 void validarSucessoGet() throws Exception{
 	Insumo insumo = new Insumo();
-	insumo.setNome("Teste");
+	insumo.setNome("teste");
 	insumo.setQuantidade(1);
 	insumo.setId(1L);
 	
-	when(insumoService.buscaporId(1L)).thenReturn(Optional.of(insumo));
+	when(insumoService.buscaporId(insumo.getId())).thenReturn(Optional.of(insumo));
 	
-	mockMvc.perform(get("/insumo/1L"))
+	mockMvc.perform(get("/insumos/1"))
 	.andExpect(status().isOk())
 	.andExpect(jsonPath("$.id").value(1))
 	.andExpect(jsonPath("$.nome").value("teste"))
@@ -212,7 +215,7 @@ void validarSucessoGet() throws Exception{
 
 @Test
 void validarIdDelete() throws Exception{
-	when(insumoService.remover(2L)).thenThrow(ResourceNotFoundException.class);
+	when(insumoService.remover(2L)).thenThrow(new ResourceNotFoundException("Id não encontrado"));
 	
 	mockMvc.perform(delete("/insumos/2"))
 	.andExpect(status().isNotFound());
@@ -231,10 +234,10 @@ void validarSucessoDelete() throws Exception{
 	insumo.setQuantidade(1);
 	insumo.setId(1L);
 	
-	when(insumoService.remover(1L)).thenReturn(true);
+	when(insumoService.remover(insumo.getId())).thenReturn(true);
 	
-	mockMvc.perform(delete("/insumos/1L"))
-	.andExpect(status().isOk());
+	mockMvc.perform(delete("/insumos/1"))
+	.andExpect(status().isNoContent());
 	
 }
 

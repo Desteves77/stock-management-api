@@ -18,15 +18,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import br.com.estoque.entity.Produto;
+import br.com.estoque.exception.GlobalHandlerException;
 import br.com.estoque.exception.ResourceNotFoundException;
 import br.com.estoque.service.ProdutoService;
 
 @WebMvcTest(ProdutoController.class)
+@Import(GlobalHandlerException.class)
 public class ProdutoControllerTest {
 	
 	@Autowired
@@ -56,7 +59,7 @@ void validarQuantidadePost() throws Exception{
 			.contentType(MediaType.APPLICATION_JSON)
 			.content("""
 				{
-					"nome": teste,
+					"nome": "teste",
 					"quantidade": -10
 				}
 					"""))
@@ -76,7 +79,7 @@ void validarSucessoPost() throws Exception{
 			.contentType(MediaType.APPLICATION_JSON)
 			.content("""
 				{
-					"nome": teste,
+					"nome": "teste",
 					"quantidade": 10
 				}
 					"""))
@@ -87,7 +90,7 @@ void validarSucessoPost() throws Exception{
 
 @Test
 void validarNomePut() throws Exception {
-	mockMvc.perform(put("/produtos")
+	mockMvc.perform(put("/produtos/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {
@@ -100,7 +103,7 @@ void validarNomePut() throws Exception {
 
 @Test
 void validarQuantidadePut() throws Exception {
-	mockMvc.perform(put("/produtos")
+	mockMvc.perform(put("/produtos/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {
@@ -120,11 +123,11 @@ void validarSucessoPut() throws Exception{
 	
 	when(produtoService.salvar(any(Produto.class))).thenReturn(salvo);
 	
-	mockMvc.perform(put("/produtos")
+	mockMvc.perform(put("/produtos/1")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content("""
 				{
-					"nome": teste,
+					"nome": "teste",
 					"quantidade": 10
 				}
 					"""))
@@ -134,7 +137,7 @@ void validarSucessoPut() throws Exception{
 
 @Test
 void validarNomePatch() throws Exception {
-	mockMvc.perform(patch("/produtos")
+	mockMvc.perform(patch("/produtos/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {
@@ -147,7 +150,7 @@ void validarNomePatch() throws Exception {
 
 @Test
 void validarQuantidadePatch() throws Exception {
-	mockMvc.perform(patch("/produtos")
+	mockMvc.perform(patch("/produtos/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {
@@ -167,11 +170,11 @@ void validarSucessoPatch() throws Exception{
 	
 	when(produtoService.salvar(any(Produto.class))).thenReturn(salvo);
 	
-	mockMvc.perform(patch("/produtos")
+	mockMvc.perform(patch("/produtos/1")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content("""
 				{
-					"nome": teste,
+					"nome": "teste",
 					"quantidade": 10
 				}
 					"""))
@@ -196,13 +199,13 @@ void validarFormatoIdGet() throws Exception{
 @Test
 void validarSucessoGet() throws Exception{
 	Produto produto = new Produto();
-	produto.setNome("Teste");
+	produto.setNome("teste");
 	produto.setQuantidade(1);
 	produto.setId(1L);
 	
 	when(produtoService.buscaporId(1L)).thenReturn(Optional.of(produto));
 	
-	mockMvc.perform(get("/produtos/1L"))
+	mockMvc.perform(get("/produtos/1"))
 	.andExpect(status().isOk())
 	.andExpect(jsonPath("$.id").value(1))
 	.andExpect(jsonPath("$.nome").value("teste"))
@@ -233,8 +236,8 @@ void validarSucessoDelete() throws Exception{
 	
 	when(produtoService.remover(1L)).thenReturn(true);
 	
-	mockMvc.perform(delete("/produtos/1L"))
-	.andExpect(status().isOk());
+	mockMvc.perform(delete("/produtos/1"))
+	.andExpect(status().isNoContent());
 	
 }
 

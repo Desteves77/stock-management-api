@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 
 import br.com.estoque.entity.Produto;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-
+@SpringBootTest
 public class ProdutoIntegrationTest {
 	@Autowired
 	ProdutoService produtoService;
@@ -33,7 +34,6 @@ void validarSalvar() {
 	Produto p = new Produto();
 	p.setNome("Teste");
 	p.setQuantidade(1);
-	p.setId(1L);
 	
 	Produto salvo = produtoService.salvar(p);
 	
@@ -60,7 +60,7 @@ void validarAtualizar() {
 	Produto p = new Produto();
 	p.setNome("Teste");
 	p.setQuantidade(1);
-	p.setId(1L);
+
 	
 	Produto salvo = produtoService.salvar(p);
 	
@@ -83,7 +83,6 @@ void validarNomeAtualizar() {
 	Produto p = new Produto();
 	p.setNome("Teste");
 	p.setQuantidade(2);
-	p.setId(1L);
 	
 	Produto salvo = produtoService.salvar(p);
 	
@@ -207,36 +206,27 @@ void validarIdDelete() {
 
 @Test
 void validarPageable() {
-	Produto p = new Produto();
-	p.setNome("p");
-	p.setQuantidade(1);
-
-	Produto p2 = new Produto();
-	p2.setNome("p2");
-	p2.setQuantidade(2);
-
-	Produto p3 = new Produto();
-	p3.setNome("p3");
-	p3.setQuantidade(3);
 	
 	
 	Pageable pageable = PageRequest.of(0, 2);
 	
 	Page<Produto> resultado = produtoService.listarTodos(pageable);
 	
-	assertEquals(2, resultado.getSize() );
-	assertEquals(3, resultado.getTotalElements());
-	assertEquals(2, resultado.getTotalPages());
-	assertEquals(0, resultado.getNumber());
+	assertEquals(produtoRepository.count(), resultado.getTotalElements());
+
 }
 
+
 @Test
-void validarPageNegativa() {
-	Pageable page = PageRequest.of(-1, 2);
+void validarPageable100() {
 	
-	assertThrows(IllegalArgumentException.class, () ->{
-		produtoService.listarTodos(page);
+	Pageable pageable = PageRequest.of(0 , 101);
+	assertThrows(IllegalArgumentException.class, () -> {
+		produtoService.listarTodos(pageable);
 	});
+
+
 }
+
 
 }

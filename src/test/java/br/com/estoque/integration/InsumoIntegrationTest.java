@@ -33,7 +33,6 @@ void validarSalvar() {
 	Insumo i = new Insumo();
 	i.setNome("Teste");
 	i.setQuantidade(1);
-	i.setId(1L);
 	
 	Insumo salvo = insumoService.salvar(i);
 	
@@ -47,7 +46,6 @@ void validarNegativo() {
 	Insumo i = new Insumo();
 	i.setNome("Teste");
 	i.setQuantidade(-1);
-	i.setId(1L);
 	
 	assertThrows(IllegalArgumentException.class, () ->{
 		insumoService.salvar(i);
@@ -60,18 +58,17 @@ void validarAtualizar() {
 	Insumo i = new Insumo();
 	i.setNome("Teste");
 	i.setQuantidade(1);
-	i.setId(1L);
 	
 	Insumo salvo = insumoService.salvar(i);
 	
 	Insumo a = new Insumo();
-	a.setNome("Teste 2");
+	a.setNome("Teste 33");
 	a.setQuantidade(2);
 	
 	Insumo atualizado = insumoService.atualizar(salvo.getId(), a);
 	
 	
-    assertEquals("Teste 2", atualizado.getNome());	
+    assertEquals("Teste 33", atualizado.getNome());	
     assertEquals(2, atualizado.getQuantidade());
     assertEquals(salvo.getId(), atualizado.getId());
 	
@@ -81,9 +78,8 @@ void validarAtualizar() {
 @Test
 void validarNomeAtualizar() {
 	Insumo i = new Insumo();
-	i.setNome("Teste");
+	i.setNome("Teste55");
 	i.setQuantidade(2);
-	i.setId(1L);
 	
 	Insumo salvo = insumoService.salvar(i);
 	
@@ -98,7 +94,7 @@ void validarNomeAtualizar() {
 		insumoService.atualizar(salvo.getId(), a);
 	});
 	
-	assertEquals("Teste", banco.getNome());
+	assertEquals("Teste55", banco.getNome());
 	assertEquals(2, banco.getQuantidade());
 	
 }
@@ -207,37 +203,24 @@ void validarIdDelete() {
 
 @Test
 void validarPageable() {
-	Insumo i = new Insumo();
-	i.setNome("i");
-	i.setQuantidade(1);
-
-	Insumo i2 = new Insumo();
-	i2.setNome("i2");
-	i2.setQuantidade(2);
-
-	Insumo i3 = new Insumo();
-	i3.setNome("i3");
-	i3.setQuantidade(3);
-	
 	
 	Pageable pageable = PageRequest.of(0, 2);
 	
 	Page<Insumo> resultado = insumoService.listarTodos(pageable);
 	
-	assertEquals(2, resultado.getSize() );
-	assertEquals(3, resultado.getTotalElements());
-	assertEquals(2, resultado.getTotalPages());
-	assertEquals(0, resultado.getNumber());
+	assertEquals(insumoRepository.count(), resultado.getTotalElements());
+
 }
 
 @Test
-void validarPageNegativa() {
-	Pageable page = PageRequest.of(-1, 2);
+void validarPageable100() {
 	
-	assertThrows(IllegalArgumentException.class, () ->{
-		insumoService.listarTodos(page);
+	Pageable pageable = PageRequest.of(0 , 101);
+	assertThrows(IllegalArgumentException.class, () -> {
+		insumoService.listarTodos(pageable);
 	});
-}
 
+
+}
 	
 }

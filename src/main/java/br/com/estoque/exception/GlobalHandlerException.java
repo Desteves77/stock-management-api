@@ -12,7 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 
 
@@ -38,6 +38,20 @@ public class GlobalHandlerException {
 		
 	return ResponseEntity.badRequest().body(body);
 	}
+	 
+	 @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	 public ResponseEntity<ApiError> handleTypeMismatch( MethodArgumentTypeMismatchException ex,HttpServletRequest request) {
+
+	     ApiError body = new ApiError(
+	             LocalDateTime.now(),
+	             HttpStatus.BAD_REQUEST.value(),
+	             "Bad Request",
+	             "Parâmetro inválido",
+	             request.getRequestURI()
+	     );
+
+	     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+	 }
 	
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request){
