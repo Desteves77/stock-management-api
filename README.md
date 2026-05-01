@@ -127,8 +127,67 @@ PostgreSQL
 
 Swagger / OpenAPI (springdoc-openapi)
 
+## Testes automatizados
+
+O projeto possui uma suíte de testes automatizados cobrindo as principais camadas da aplicação.
+
+### Tipos de testes implementados
+
+#### Testes unitários
+
+Os testes unitários validam regras de negócio de forma isolada, principalmente nos services.
+
+Exemplos de cenários testados:
+
+- validação de nome vazio;
+- validação de quantidade negativa;
+- busca por ID inexistente;
+- regras de atualização;
+- comportamento esperado em cenários válidos e inválidos.
+
+Nesses testes, os repositories são simulados com mocks, permitindo validar apenas a lógica da camada de service.
+
+#### Testes de controller
+
+Os testes de controller validam o contrato HTTP da API utilizando `MockMvc`.
+
+Exemplos de cenários testados:
+
+- criação de Produto e Insumo com dados válidos;
+- retorno `400 Bad Request` para dados inválidos;
+- retorno `404 Not Found` para IDs inexistentes;
+- retorno `204 No Content` em exclusões bem-sucedidas;
+- validação de rotas, JSONs e status HTTP.
+
+Esses testes garantem que os endpoints respondem corretamente sem depender do banco de dados real.
+
+#### Testes de integração
+
+Os testes de integração validam o funcionamento real entre service, repository e banco de dados de teste.
+
+Exemplos de cenários testados:
+
+- salvar Produto e Insumo no banco;
+- buscar registros por ID;
+- atualizar registros;
+- atualizar parcialmente;
+- remover registros;
+- validar paginação;
+- validar regras críticas em ambiente integrado.
+
+Esses testes garantem que as camadas principais funcionam corretamente em conjunto.
+
+---
+
+### Execução dos testes
+
+Para executar toda a suíte de testes, use o Maven Wrapper na raiz do projeto:
+
+```bash
+./mvnw test
+````
+
 ## Próximas Evoluções
-Implementar testes automatizados com JUnit e MockMvc
 
 Realizar deploy da aplicação
 
