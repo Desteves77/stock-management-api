@@ -105,3 +105,23 @@ BUILD SUCCESS
 
 ```bash
 ./mvnw test
+````
+
+## [Unreleased]
+
+### 04/05
+- Criada estrutura inicial dos pacotes de autenticação e segurança:
+  - `auth`;
+  - `security`;
+  - `usuario`;
+  - `dto.auth`.
+
+### 05/05
+- Implementada base inicial da autenticação:
+  - `Role`;
+  - `Usuario`;
+  - `UsuarioRepository`;
+  - `RegisterRequestDTO`;
+  - `LoginRequestDTO`;
+  - `AuthResponseDTO`;
+  - `PasswordEncoder` com `BCryptPasswordEncoder`.
