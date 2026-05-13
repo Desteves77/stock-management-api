@@ -125,3 +125,9 @@ BUILD SUCCESS
   - `LoginRequestDTO`;
   - `AuthResponseDTO`;
   - `PasswordEncoder` com `BCryptPasswordEncoder`.
+  
+### 08/05
+- Implementada integração inicial com o fluxo de autenticação do Spring Security.
+- Criado `UsuarioDetailsService` usando `UsuarioRepository.findByEmail`.
+- Configurado `AuthenticationManager` no `SecurityConfig`.
+- Adicionada dependência `java-jwt` para futura geração e validação de tokens JWT.

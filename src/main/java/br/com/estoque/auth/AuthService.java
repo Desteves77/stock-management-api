@@ -67,7 +67,17 @@ public RegisterResponseDTO registrar (RegisterRequestDTO registrar) {
 	
 }
 
-//public Usuario logar (LoginRequestDTO Login) {
+//public AuthResponseDTO login (LoginRequestDTO Login) {
+	
+//	if(Login.getEmail()== null|| Login.getEmail().isBlank()){
+//		throw new IllegalArgumentException("Email não pode ser vazio");
+//	}
+	
+//	if(Login.getSenha() == null|| Login.getSenha().isBlank()){
+//		throw new IllegalArgumentException("Senha não pode ser vazia");
+//	}
+	
+	
 	
 //}
 
