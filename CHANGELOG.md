@@ -139,3 +139,12 @@ BUILD SUCCESS
 - Configurado uso de variável de ambiente para chave secreta do JWT.
 - Implementada geração de token com issuer, subject, role, expiração e assinatura.
 - Implementada validação de token retornando o subject/email do usuário.
+
+### 15/05
+
+- Implementado fluxo inicial de login em `/auth/login`.
+- Implementado `AuthService.login`, usando `AuthenticationManager` para validar email e senha.
+- Adicionada criação de `UsernamePasswordAuthenticationToken` com email e senha recebidos pelo `LoginRequestDTO`.
+- Integrado `TokenService` ao fluxo de login para gerar JWT após autenticação bem-sucedida.
+- Implementado retorno de `AuthResponseDTO` com token e tipo `Bearer`.
+- Implementado endpoint de login no `AuthController`, retornando `200 OK`.

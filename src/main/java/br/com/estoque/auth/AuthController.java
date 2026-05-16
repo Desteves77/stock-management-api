@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.estoque.dto.auth.RegisterRequestDTO;
 import br.com.estoque.dto.auth.RegisterResponseDTO;
+import br.com.estoque.dto.auth.LoginRequestDTO;
+import br.com.estoque.dto.auth.AuthResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +20,7 @@ private final AuthService service;
 public AuthController(AuthService service) {
 	this.service = service;
 }
-	
-	
-	
+			
 @PostMapping("/register")
 public ResponseEntity<RegisterResponseDTO> registrar (@Valid @RequestBody RegisterRequestDTO dto){ 
 	
@@ -30,6 +30,15 @@ public ResponseEntity<RegisterResponseDTO> registrar (@Valid @RequestBody Regist
 	
 	
 }
+
+@PostMapping("/login")
+public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto){
 	
+	AuthResponseDTO response = service.login(dto);
+	
+	return ResponseEntity.status(200).body(response);
+}
+
+
 	
 }

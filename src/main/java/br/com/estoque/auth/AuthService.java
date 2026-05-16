@@ -1,28 +1,37 @@
 package br.com.estoque.auth;
 
 import br.com.estoque.usuario.UsuarioRepository;
-//import br.com.estoque.dto.auth.LoginRequestDTO;
+import br.com.estoque.dto.auth.AuthResponseDTO;
+import br.com.estoque.dto.auth.LoginRequestDTO;
 import br.com.estoque.dto.auth.RegisterRequestDTO;
 import br.com.estoque.dto.auth.RegisterResponseDTO;
+import br.com.estoque.exception.ResourceNotFoundException;
 import br.com.estoque.usuario.Role;
 import br.com.estoque.usuario.Usuario;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
-
 	
 private final UsuarioRepository repository;
 
 private final PasswordEncoder passwordEncoder;
-	
 
-public AuthService(UsuarioRepository repository, PasswordEncoder passwordEncoder) {
+private final AuthenticationManager authenticationManager;
+
+private final TokenService tokenService;
+
+public AuthService(UsuarioRepository repository, PasswordEncoder passwordEncoder, 
+		AuthenticationManager authenticationManager, TokenService tokenService) {
 	this.repository = repository;
 	this.passwordEncoder = passwordEncoder;
+	this.authenticationManager= authenticationManager;
+	this.tokenService= tokenService;
 }
-
 
 public RegisterResponseDTO registrar (RegisterRequestDTO registrar) {
 	
@@ -62,25 +71,37 @@ public RegisterResponseDTO registrar (RegisterRequestDTO registrar) {
 					(salvo.getNome()),
 					(salvo.getEmail()),
 					(salvo.getRole())
-									);
+									);	
+}
+
+public AuthResponseDTO login (LoginRequestDTO Login) {
 	
+	if(Login.getEmail()== null|| Login.getEmail().isBlank()){
+		throw new IllegalArgumentException("Email não pode ser vazio");
+	}
+	
+	if(!repository.existsByEmail(Login.getEmail())) {
+		throw new ResourceNotFoundException("Email não cadastrado");
+	}
+	
+	if(Login.getSenha() == null|| Login.getSenha().isBlank()){
+		throw new IllegalArgumentException("Senha não pode ser vazia");
+	}
+	
+	UsernamePasswordAuthenticationToken authToken = 
+			new UsernamePasswordAuthenticationToken(
+					Login.getEmail(), 
+					Login.getSenha());
+	
+	authenticationManager.authenticate(authToken);
+	
+	Usuario usuario = repository.findByEmail(Login.getEmail())
+			.orElseThrow(() -> new ResourceNotFoundException ("Usuário não encontrado"));
+	
+	String token = tokenService.gerarToken(usuario);
+	
+	return new AuthResponseDTO(token, "Bearer");
 	
 }
 
-//public AuthResponseDTO login (LoginRequestDTO Login) {
-	
-//	if(Login.getEmail()== null|| Login.getEmail().isBlank()){
-//		throw new IllegalArgumentException("Email não pode ser vazio");
-//	}
-	
-//	if(Login.getSenha() == null|| Login.getSenha().isBlank()){
-//		throw new IllegalArgumentException("Senha não pode ser vazia");
-//	}
-	
-	
-	
-//}
-
-
-	
 }
