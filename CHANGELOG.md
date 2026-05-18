@@ -148,3 +148,9 @@ BUILD SUCCESS
 - Integrado `TokenService` ao fluxo de login para gerar JWT após autenticação bem-sucedida.
 - Implementado retorno de `AuthResponseDTO` com token e tipo `Bearer`.
 - Implementado endpoint de login no `AuthController`, retornando `200 OK`.
+
+### 18/05
+
+- Implementado `SecurityFilter` para interceptar requisições, extrair token Bearer do header `Authorization`, validar JWT e montar autenticação no `SecurityContext`.
+- Integrado `TokenService` e `UsuarioDetailsService` ao fluxo de autenticação por token.
+- Ajustados testes de controller com `@AutoConfigureMockMvc(addFilters = false)` e exclusão do `SecurityFilter`, mantendo esses testes focados no contrato HTTP dos controllers.
