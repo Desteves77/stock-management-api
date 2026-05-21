@@ -1,6 +1,7 @@
 package br.com.estoque.dto.auth;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 
 
@@ -13,6 +14,7 @@ public class RegisterRequestDTO {
 	@NotBlank(message = "Email é obrigatório")
 	private String email;
 	
+	@Size(min = 1, message = "Senha precisa ter no mínimo 8 caractéres")
 	@NotBlank(message = "Senha é obrigatória")
 	private String senha;
 	

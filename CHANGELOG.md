@@ -154,3 +154,12 @@ BUILD SUCCESS
 - Implementado `SecurityFilter` para interceptar requisições, extrair token Bearer do header `Authorization`, validar JWT e montar autenticação no `SecurityContext`.
 - Integrado `TokenService` e `UsuarioDetailsService` ao fluxo de autenticação por token.
 - Ajustados testes de controller com `@AutoConfigureMockMvc(addFilters = false)` e exclusão do `SecurityFilter`, mantendo esses testes focados no contrato HTTP dos controllers.
+
+### 20/05
+
+- Finalizada configuração inicial de segurança com JWT.
+- Configuradas rotas públicas, rotas protegidas e autorização por roles no `SecurityConfig`.
+- Liberadas rotas de autenticação e Swagger.
+- Adicionado tratamento para credenciais inválidas no login.
+- Adicionada validação de tamanho mínimo de senha no `RegisterRequestDTO`.
+- Validado manualmente o fluxo de autenticação com Bearer Token.
