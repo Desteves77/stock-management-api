@@ -43,17 +43,16 @@ public RegisterResponseDTO registrar (RegisterRequestDTO registrar) {
 		throw new IllegalArgumentException("Email não pode ser vazio");
 	}
 	
-	if(repository.existsByEmail(registrar.getEmail())) {
-		throw new IllegalArgumentException("Esse email já está cadastrado");
-	}
-	
-	
 	if(registrar.getSenha() == null|| registrar.getSenha().isBlank()){
 		throw new IllegalArgumentException("Senha não pode ser vazia");
 	}
 	
 	if(registrar.getSenha().length()<8) {
 		throw new IllegalArgumentException("Senha não pode ser menor que 8 caracteres");
+	}
+	
+	if(repository.existsByEmail(registrar.getEmail())) {
+		throw new IllegalArgumentException("Esse email já está cadastrado");
 	}
 	
 	String hash = passwordEncoder.encode(registrar.getSenha());
@@ -81,7 +80,7 @@ public AuthResponseDTO login (LoginRequestDTO Login) {
 	}
 	
 	if(!repository.existsByEmail(Login.getEmail())) {
-		throw new ResourceNotFoundException("Email não cadastrado");
+		throw new ResourceNotFoundException("Credencias inválidas");
 	}
 	
 	if(Login.getSenha() == null|| Login.getSenha().isBlank()){

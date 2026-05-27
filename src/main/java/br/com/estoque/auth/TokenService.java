@@ -14,7 +14,7 @@ import br.com.estoque.usuario.Usuario;
 @Service
 public class TokenService {
 
-	private static final String ISSUER = "estoque-string-api";
+	private static final String ISSUER = "estoque-spring-api";
 	
 	@Value("${jwt.secret}") 
 	private String secret;
@@ -27,11 +27,11 @@ public class TokenService {
 		Algorithm algorithm = Algorithm.HMAC256(secret);
 		
 		return JWT.create()	
-			.withIssuer(ISSUER)
-			.withSubject(usuario.getEmail())
-			.withClaim("role", usuario.getRole().name())
-			.withExpiresAt(Instant.now().plus(expirationHours, ChronoUnit.HOURS))
-			.sign(algorithm);
+				.withIssuer(ISSUER)
+				.withSubject(usuario.getEmail())
+				.withClaim("role", usuario.getRole().name())
+				.withExpiresAt(Instant.now().plus(expirationHours, ChronoUnit.HOURS))
+				.sign(algorithm);
 	}
 	
 	public String validarToken(String token) {

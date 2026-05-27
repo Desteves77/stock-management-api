@@ -163,3 +163,10 @@ BUILD SUCCESS
 - Adicionado tratamento para credenciais inválidas no login.
 - Adicionada validação de tamanho mínimo de senha no `RegisterRequestDTO`.
 - Validado manualmente o fluxo de autenticação com Bearer Token.
+
+### 26/05
+
+- Adicionados testes unitários para `AuthService`, cobrindo registro, login e validações de regras de negócio.
+- Ajustada ordem das validações no registro para validar campos obrigatórios antes de consultar o banco.
+- Corrigido `issuer` do JWT no `TokenService`.
+- Adicionado `setId` em `Usuario` para suporte aos testes unitários.
