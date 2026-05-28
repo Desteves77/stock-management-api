@@ -170,3 +170,10 @@ BUILD SUCCESS
 - Ajustada ordem das validações no registro para validar campos obrigatórios antes de consultar o banco.
 - Corrigido `issuer` do JWT no `TokenService`.
 - Adicionado `setId` em `Usuario` para suporte aos testes unitários.
+
+### 28/05
+
+- Adicionados testes de controller para `AuthController`.
+- Cobertos cenários de registro com sucesso, senha curta, login com sucesso e credenciais inválidas.
+- Corrigida validação de tamanho mínimo da senha no `RegisterRequestDTO`.
+- Validado que requisições inválidas no registro retornam `400 Bad Request` antes de chamar o service.

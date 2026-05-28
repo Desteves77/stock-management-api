@@ -14,7 +14,7 @@ public class RegisterRequestDTO {
 	@NotBlank(message = "Email é obrigatório")
 	private String email;
 	
-	@Size(min = 1, message = "Senha precisa ter no mínimo 8 caractéres")
+	@Size(min = 8, message = "Senha precisa ter no mínimo 8 caractéres")
 	@NotBlank(message = "Senha é obrigatória")
 	private String senha;
 	
