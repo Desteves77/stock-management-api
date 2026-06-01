@@ -177,3 +177,10 @@ BUILD SUCCESS
 - Cobertos cenários de registro com sucesso, senha curta, login com sucesso e credenciais inválidas.
 - Corrigida validação de tamanho mínimo da senha no `RegisterRequestDTO`.
 - Validado que requisições inválidas no registro retornam `400 Bad Request` antes de chamar o service.
+
+### 01/06
+
+- Adicionados testes de integração para a camada de segurança.
+- Cobertos cenários de acesso sem token, acesso com usuário `USER`, bloqueio de `USER` em rotas administrativas e acesso permitido para `ADMIN`.
+- Validado fluxo real com `SecurityFilter`, `TokenService`, `UsuarioDetailsService`, `SecurityContext` e `SecurityConfig`.
+- Configurado retorno `401 Unauthorized` para requisições sem autenticação válida.
