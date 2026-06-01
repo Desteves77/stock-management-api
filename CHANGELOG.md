@@ -184,3 +184,7 @@ BUILD SUCCESS
 - Cobertos cenários de acesso sem token, acesso com usuário `USER`, bloqueio de `USER` em rotas administrativas e acesso permitido para `ADMIN`.
 - Validado fluxo real com `SecurityFilter`, `TokenService`, `UsuarioDetailsService`, `SecurityContext` e `SecurityConfig`.
 - Configurado retorno `401 Unauthorized` para requisições sem autenticação válida.
+- Adicionada configuração de autenticação Bearer Token no Swagger.
+- Documentados endpoints de autenticação em `AuthController`.
+- Documentados DTOs de autenticação: `RegisterRequestDTO`, `LoginRequestDTO`, `AuthResponseDTO` e `RegisterResponseDTO`.
+- Documentada entidade `Usuario` para melhor visualização da estrutura no Swagger.

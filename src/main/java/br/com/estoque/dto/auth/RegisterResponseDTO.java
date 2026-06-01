@@ -2,14 +2,21 @@ package br.com.estoque.dto.auth;
 
 import br.com.estoque.usuario.Role;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Resposta retornada após registro de usuário")
 public class RegisterResponseDTO {
 
+    @Schema(description = "ID do usuário criado", example = "1")
 	private Long id;
 	
+    @Schema(description = "Nome do usuário", example = "Davi Esteves")
 	private String nome; 
 	
+    @Schema(description = "Email do usuário", example = "davi@email.com")
 	private String email;
 	
+    @Schema(description = "Perfil de acesso do usuário", example = "USER")
 	private Role role; 
 	
 
