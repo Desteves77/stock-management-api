@@ -1,1 +1,0 @@
-docs: documenta autenticacao no Swagger
