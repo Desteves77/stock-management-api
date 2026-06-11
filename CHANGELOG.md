@@ -3,10 +3,6 @@
 ## Data
 30/04/2026
 
-## Objetivo do dia
-Revisar, corrigir e consolidar a suíte de testes automatizados do projeto Estoque Spring API, incluindo testes unitários, testes de controller e testes de integração.
-
----
 
 ## Atividades realizadas
 
@@ -188,7 +184,7 @@ BUILD SUCCESS
 - Documentados DTOs de autenticação: `RegisterRequestDTO`, `LoginRequestDTO`, `AuthResponseDTO` e `RegisterResponseDTO`.
 - Documentada entidade `Usuario` para melhor visualização da estrutura no Swagger.
 
-## ## [2026-06-11] - Dockerização da aplicação
+### 10/06/26 - Dockerização da aplicação
 
 ### Adicionado
 
