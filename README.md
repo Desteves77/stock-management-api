@@ -415,10 +415,3 @@ docker volume ls
 ```
 
 
-## Próximas Evoluções
-
-Realizar deploy da aplicação
-
-Criar um front-end consumindo a API
-
-Implementar autenticação e autorização
