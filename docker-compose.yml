@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16
+    container_name: estoque-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_EXTERNAL_PORT}:5432"
+    volumes:
+      - estoque_postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: estoque-api
+    depends_on:
+      - db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION_HOURS: ${JWT_EXPIRATION_HOURS}
+    ports:
+      - "${API_EXTERNAL_PORT}:8080"
+
+volumes:
+  estoque_postgres_data:

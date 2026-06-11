@@ -187,6 +187,234 @@ Para executar toda a suíte de testes, use o Maven Wrapper na raiz do projeto:
 ./mvnw test
 ````
 
+## Rodando com Docker
+
+O projeto possui configuração Docker para subir a API Spring Boot junto com um banco PostgreSQL em containers.
+
+### Pré-requisitos
+
+- Docker
+- Docker Compose
+
+### Configuração
+
+Crie um arquivo `.env` na raiz do projeto com base no arquivo `.env.example`.
+
+## Docker
+
+O projeto possui configuração Docker para executar a API Spring Boot junto com um banco PostgreSQL em containers.
+
+A estrutura foi criada para padronizar o ambiente da aplicação, evitando a necessidade de instalar e configurar manualmente o PostgreSQL na máquina local.
+
+### Estrutura Docker
+
+O projeto utiliza os seguintes arquivos para configuração do ambiente com Docker:
+
+```text
+Dockerfile
+.dockerignore
+docker-compose.yml
+.env.example
+application-docker.properties
+```
+
+### Tecnologias utilizadas no ambiente Docker
+
+* Docker
+* Docker Compose
+* Java 21
+* Spring Boot
+* PostgreSQL 16
+
+### Como funciona
+
+A aplicação é executada em dois serviços principais:
+
+```text
+api = container da aplicação Spring Boot
+db = container do banco PostgreSQL
+```
+
+O serviço `api` é construído a partir do `Dockerfile`, utilizando multi-stage build:
+
+```text
+1. Primeira etapa: usa JDK para compilar o projeto e gerar o arquivo .jar.
+2. Segunda etapa: usa JRE para executar apenas o .jar gerado.
+```
+
+O serviço `db` utiliza a imagem oficial do PostgreSQL:
+
+```yaml
+image: postgres:16
+```
+
+A comunicação entre a API e o banco acontece pela rede interna do Docker Compose. Por isso, dentro do ambiente Docker, a API acessa o banco usando o host:
+
+```text
+db
+```
+
+Exemplo de conexão usada pela aplicação:
+
+```properties
+spring.datasource.url=jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+```
+
+### Variáveis de ambiente
+
+As configurações sensíveis e valores do ambiente são definidos por variáveis de ambiente.
+
+Para rodar o projeto, crie um arquivo `.env` na raiz do projeto com base no arquivo `.env.example`.
+
+Exemplo:
+
+```env
+POSTGRES_USER=seu_usuario
+POSTGRES_PASSWORD=sua_senha
+POSTGRES_DB=estoque_db_docker
+
+DB_HOST=db
+DB_PORT=5432
+
+API_EXTERNAL_PORT=8080
+POSTGRES_EXTERNAL_PORT=5433
+
+JWT_SECRET=sua_chave_jwt
+JWT_EXPIRATION_HOURS=2
+```
+
+O arquivo `.env` não deve ser versionado no GitHub.
+
+### Profile Docker
+
+O projeto possui um profile específico para execução com Docker:
+
+```text
+application-docker.properties
+```
+
+Esse profile é ativado no `docker-compose.yml` por meio da variável:
+
+```yaml
+SPRING_PROFILES_ACTIVE: docker
+```
+
+Com isso, a aplicação utiliza as configurações específicas do ambiente Docker, como conexão com o banco via variáveis de ambiente.
+
+### Executando o projeto com Docker
+
+Na raiz do projeto, execute:
+
+```bash
+docker compose up --build
+```
+
+Esse comando irá:
+
+```text
+1. Construir a imagem da API.
+2. Baixar a imagem do PostgreSQL, caso ainda não exista localmente.
+3. Criar os containers da API e do banco.
+4. Criar o volume do PostgreSQL.
+5. Subir a aplicação com o profile docker ativo.
+```
+
+Após a inicialização, a API estará disponível em:
+
+```text
+http://localhost:8080
+```
+
+### Acessando o banco PostgreSQL
+
+Caso seja necessário acessar o banco externamente por ferramentas como pgAdmin, DBeaver ou IntelliJ Database, utilize:
+
+```text
+Host: localhost
+Port: 5433
+Database: estoque_db_docker
+User: definido no .env
+Password: definido no .env
+```
+
+Dentro da rede Docker, a API acessa o banco usando:
+
+```text
+Host: db
+Port: 5432
+```
+
+### Parando os containers
+
+Para parar e remover os containers, mantendo os dados persistidos no volume:
+
+```bash
+docker compose down
+```
+
+Para subir novamente:
+
+```bash
+docker compose up
+```
+
+Para reconstruir a imagem da API e subir os containers:
+
+```bash
+docker compose up --build
+```
+
+### Persistência de dados
+
+O PostgreSQL utiliza um volume Docker para persistir os dados:
+
+```yaml
+volumes:
+  - estoque_postgres_data:/var/lib/postgresql/data
+```
+
+Dessa forma, mesmo que os containers sejam removidos com:
+
+```bash
+docker compose down
+```
+
+os dados continuam salvos no volume.
+
+Para remover também os volumes e apagar os dados do banco Docker, utilize:
+
+```bash
+docker compose down -v
+```
+
+Use esse comando apenas quando quiser resetar completamente o banco.
+
+### Comandos úteis
+
+```bash
+# Subir os containers
+docker compose up
+
+# Subir reconstruindo a imagem da API
+docker compose up --build
+
+# Parar e remover containers
+docker compose down
+
+# Parar containers sem remover
+docker compose stop
+
+# Iniciar containers parados
+docker compose start
+
+# Listar containers em execução
+docker ps
+
+# Listar volumes
+docker volume ls
+```
+
+
 ## Próximas Evoluções
 
 Realizar deploy da aplicação
