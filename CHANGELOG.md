@@ -107,16 +107,15 @@ BUILD SUCCESS
 ./mvnw test
 ````
 
-## [Unreleased]
 
-### 04/05
+### 04/05/26
 - Criada estrutura inicial dos pacotes de autenticação e segurança:
   - `auth`;
   - `security`;
   - `usuario`;
   - `dto.auth`.
 
-### 05/05
+### 05/05/26
 - Implementada base inicial da autenticação:
   - `Role`;
   - `Usuario`;
@@ -126,13 +125,13 @@ BUILD SUCCESS
   - `AuthResponseDTO`;
   - `PasswordEncoder` com `BCryptPasswordEncoder`.
   
-### 12/05
+### 12/05/26
 - Implementada integração inicial com o fluxo de autenticação do Spring Security.
 - Criado `UsuarioDetailsService` usando `UsuarioRepository.findByEmail`.
 - Configurado `AuthenticationManager` no `SecurityConfig`.
 - Adicionada dependência `java-jwt` para futura geração e validação de tokens JWT.
 
-### 14/05
+### 14/05/26
 
 - Implementado `TokenService` para geração e validação de tokens JWT.
 - Adicionadas configurações `jwt.secret` e `jwt.expiration-hours`.
@@ -140,7 +139,7 @@ BUILD SUCCESS
 - Implementada geração de token com issuer, subject, role, expiração e assinatura.
 - Implementada validação de token retornando o subject/email do usuário.
 
-### 15/05
+### 15/05/26
 
 - Implementado fluxo inicial de login em `/auth/login`.
 - Implementado `AuthService.login`, usando `AuthenticationManager` para validar email e senha.
@@ -149,13 +148,13 @@ BUILD SUCCESS
 - Implementado retorno de `AuthResponseDTO` com token e tipo `Bearer`.
 - Implementado endpoint de login no `AuthController`, retornando `200 OK`.
 
-### 18/05
+### 18/05/26
 
 - Implementado `SecurityFilter` para interceptar requisições, extrair token Bearer do header `Authorization`, validar JWT e montar autenticação no `SecurityContext`.
 - Integrado `TokenService` e `UsuarioDetailsService` ao fluxo de autenticação por token.
 - Ajustados testes de controller com `@AutoConfigureMockMvc(addFilters = false)` e exclusão do `SecurityFilter`, mantendo esses testes focados no contrato HTTP dos controllers.
 
-### 20/05
+### 20/05/26
 
 - Finalizada configuração inicial de segurança com JWT.
 - Configuradas rotas públicas, rotas protegidas e autorização por roles no `SecurityConfig`.
@@ -164,21 +163,21 @@ BUILD SUCCESS
 - Adicionada validação de tamanho mínimo de senha no `RegisterRequestDTO`.
 - Validado manualmente o fluxo de autenticação com Bearer Token.
 
-### 26/05
+### 26/05/26
 
 - Adicionados testes unitários para `AuthService`, cobrindo registro, login e validações de regras de negócio.
 - Ajustada ordem das validações no registro para validar campos obrigatórios antes de consultar o banco.
 - Corrigido `issuer` do JWT no `TokenService`.
 - Adicionado `setId` em `Usuario` para suporte aos testes unitários.
 
-### 28/05
+### 28/05/26
 
 - Adicionados testes de controller para `AuthController`.
 - Cobertos cenários de registro com sucesso, senha curta, login com sucesso e credenciais inválidas.
 - Corrigida validação de tamanho mínimo da senha no `RegisterRequestDTO`.
 - Validado que requisições inválidas no registro retornam `400 Bad Request` antes de chamar o service.
 
-### 01/06
+### 01/06/26
 
 - Adicionados testes de integração para a camada de segurança.
 - Cobertos cenários de acesso sem token, acesso com usuário `USER`, bloqueio de `USER` em rotas administrativas e acesso permitido para `ADMIN`.
@@ -188,3 +187,27 @@ BUILD SUCCESS
 - Documentados endpoints de autenticação em `AuthController`.
 - Documentados DTOs de autenticação: `RegisterRequestDTO`, `LoginRequestDTO`, `AuthResponseDTO` e `RegisterResponseDTO`.
 - Documentada entidade `Usuario` para melhor visualização da estrutura no Swagger.
+
+## ## [2026-06-11] - Dockerização da aplicação
+
+### Adicionado
+
+* Adicionada dockerização da aplicação com `Dockerfile` utilizando multi-stage build.
+* Adicionado `docker-compose.yml` para subir a API Spring Boot junto com PostgreSQL em containers.
+* Adicionado profile Docker com `application-docker.properties`.
+* Adicionado suporte a variáveis de ambiente para configuração da conexão com o banco e JWT.
+* Adicionado `.env.example` como modelo de configuração do ambiente Docker.
+* Adicionado `.dockerignore` para evitar o envio de arquivos desnecessários durante o build da imagem.
+* Adicionado volume Docker para persistência dos dados do PostgreSQL.
+
+### Alterado
+
+* Separada a configuração local da configuração em ambiente Docker.
+* Ajustada a conexão da API para usar o host interno `db` no ambiente Docker, em vez de `localhost`.
+
+### Validado
+
+* Validada a subida da API e do PostgreSQL com Docker Compose.
+* Validada a comunicação entre o container da API e o container do banco.
+* Validada a persistência dos dados do PostgreSQL após remover e recriar os containers.
+* Validado o acesso à API pela porta externa configurada no Docker Compose.
