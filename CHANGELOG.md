@@ -173,7 +173,7 @@ BUILD SUCCESS
 - Corrigida validação de tamanho mínimo da senha no `RegisterRequestDTO`.
 - Validado que requisições inválidas no registro retornam `400 Bad Request` antes de chamar o service.
 
-### 01/06/26
+### 01/06/26 
 
 - Adicionados testes de integração para a camada de segurança.
 - Cobertos cenários de acesso sem token, acesso com usuário `USER`, bloqueio de `USER` em rotas administrativas e acesso permitido para `ADMIN`.
@@ -184,7 +184,7 @@ BUILD SUCCESS
 - Documentados DTOs de autenticação: `RegisterRequestDTO`, `LoginRequestDTO`, `AuthResponseDTO` e `RegisterResponseDTO`.
 - Documentada entidade `Usuario` para melhor visualização da estrutura no Swagger.
 
-### 10/06/26 - Dockerização da aplicação
+### 10/06/26 
 
 ### Adicionado
 
